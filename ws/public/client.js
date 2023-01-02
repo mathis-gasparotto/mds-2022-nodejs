@@ -14,6 +14,7 @@ function connect() {
   ws.onopen = () => {
     console.log('Connected')
     chatStatus.style.backgroundColor = 'green'
+    // document.querySelector('#connected').innerText = 'Connected as: ' + event.data
   }
   ws.onclose = () => {
     console.log('Diconnected')
@@ -24,7 +25,17 @@ function connect() {
     console.log('Error! ', error)
   }
   ws.onmessage = (event) => {
-    addMessage(event.data, 'message-received')
+    const jsonParsed = JSON.parse(event.data)
+    console.log(jsonParsed)
+    if(jsonParsed.type !== "message") {
+      document.querySelector('#connected').innerText = 'Connected as: ' + jsonParsed.data
+      return
+    }
+    if (jsonParsed.data.isMe) {
+      addMessage(jsonParsed.data.msg, 'message-send')
+      return
+    }
+    addMessage(jsonParsed.data.name + ': ' + jsonParsed.data.msg, 'message-received')
   }
 }
 
@@ -36,7 +47,7 @@ document.querySelector('#message-form').addEventListener('submit', (e) => {
   if (input.value.length === 0) {
     return
   }
-  addMessage(input.value, 'message-send')
+  // addMessage(input.value, 'message-send')
   ws.send(input.value)
   input.value = ''
 })

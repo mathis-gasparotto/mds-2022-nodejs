@@ -10,13 +10,13 @@
   padding: 10px;
   background-color: lightgray;
   border-radius: 10px;
-  margin: 10px 30px 10px 0;
+  margin: 10px 50px 10px 0;
 }
 .message-send {
   text-align: right;
   padding: 10px;
   border-radius: 10px;
-  margin: 10px 0 10px 30px;
+  margin: 10px 0 10px 50px;
   background-color: rgb(108, 187, 213);
 }
 #chat-status {
@@ -24,4 +24,12 @@
   height: 10px;
   border-radius: 50%;
   background-color: red;
+}
+.btn {
+  text-decoration: none;
+  color: black;
+  padding: 7px 12px;
+  margin: 10px 0;
+  display: inline-block;
+  background-color: lightgray;
 }
