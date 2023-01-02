@@ -4,6 +4,8 @@ import bodyParser from 'body-parser'
 import cookieParser from 'cookie-parser'
 import path from 'path'
 
+const SECRET_KEY = "^x&+r=lz0k0rex5!beuvri4#7a9!ugm371i_-yt-g=czior_7v"
+
 function main() {
   const app = express() as unknown as Application
   expressWs(app)
@@ -22,14 +24,14 @@ function main() {
   ])
 
   app.use(express.static(path.join(__dirname, 'public')))
-  app.use(cookieParser())
+  app.use(cookieParser(SECRET_KEY))
 
   // app.get('/', (req, res) => {
   //   res.sendFile(path.join(__dirname, 'index.html'))
   // })
 
   app.get('/login', (req, res) => {
-    const ssid = parseInt(req.cookies.ssid ??  '', 10)
+    const ssid = parseInt(req.signedCookies.ssid ??  '', 10)
     if(ssid && userMap.has(ssid)) {
       res.redirect('/')
       return
@@ -39,7 +41,7 @@ function main() {
   })
 
   app.get('/logout', (req, res) => {
-    if(!parseInt(req.cookies.ssid ?? '', 10)) {
+    if(!parseInt(req.signedCookies.ssid ?? '', 10)) {
       res.redirect('/login')
       return
     }
@@ -49,7 +51,7 @@ function main() {
   })
   
   app.get('/', (req, res) => {
-    const ssid = parseInt(req.cookies.ssid ?? '', 10)
+    const ssid = parseInt(req.signedCookies.ssid ?? '', 10)
     if(!ssid || !userMap.has(ssid)) {
       res.redirect('/login')
       return
@@ -59,7 +61,7 @@ function main() {
   })
 
   app.ws('/ws', (ws, req) => {
-    const ssid = parseInt(req.cookies.ssid ?? '', 10)
+    const ssid = parseInt(req.signedCookies.ssid ?? '', 10)
     const user = userMap.get(ssid)
     if (!user) {
       ws.close()
@@ -103,7 +105,7 @@ function main() {
   })
 
   app.post('/login', bodyParser.urlencoded(), (req, res) => {
-    const ssid = parseInt(req.cookies.ssid ?? '', 10)
+    const ssid = parseInt(req.signedCookies.ssid ?? '', 10)
     if(ssid && userMap.has(ssid)) {
       res.redirect('/')
       return
@@ -115,7 +117,9 @@ function main() {
       setTimeout(() => res.redirect('/login'), 5000)
       return
     }
-    res.cookie('ssid', user.id)
+    const expiresDate = new Date()
+    expiresDate.setDate(expiresDate.getDate() + 14);
+    res.cookie('ssid', user.id, { signed: true, httpOnly: true, expires: expiresDate, sameSite: true })
     res.redirect('/')
   })
 }

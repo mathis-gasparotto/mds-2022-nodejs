@@ -28,7 +28,9 @@ function connect() {
     const jsonParsed = JSON.parse(event.data)
     console.log(jsonParsed)
     if(jsonParsed.type !== "message") {
-      document.querySelector('#connected').innerText = 'Connected as: ' + jsonParsed.data
+      const userName = document.createElement('b')
+      userName.innerText = jsonParsed.data
+      document.querySelector('#connected').appendChild(userName)
       return
     }
     if (jsonParsed.data.isMe) {
