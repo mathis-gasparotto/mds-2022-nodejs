@@ -1,0 +1,18 @@
+{
+  "name": "ws",
+  "version": "1.0.0",
+  "description": "oui",
+  "main": "server.js",
+  "scripts": {
+    "watch": "node --watch .",
+    "test": "jest"
+  },
+  "author": "Mathis Gasparotto",
+  "license": "ISC",
+  "dependencies": {
+    "cookie-parser": "^1.4.6",
+    "express": "^4.18.2",
+    "express-ws": "^5.0.2",
+    "ws": "^8.11.0"
+  }
+}

@@ -1,0 +1,27 @@
+#message-list {
+  list-style-type: none; 
+  width: 500px;
+  height: 400px;
+  overflow: auto;
+  padding: 0;
+}
+.message-received {
+  text-align: left;
+  padding: 10px;
+  background-color: lightgray;
+  border-radius: 10px;
+  margin: 10px 30px 10px 0;
+}
+.message-send {
+  text-align: right;
+  padding: 10px;
+  border-radius: 10px;
+  margin: 10px 0 10px 30px;
+  background-color: rgb(108, 187, 213);
+}
+#chat-status {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: red;
+}
