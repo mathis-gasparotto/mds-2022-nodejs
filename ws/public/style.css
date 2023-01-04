@@ -33,3 +33,7 @@
   display: inline-block;
   background-color: lightgray;
 }
+.login-forms {
+  display: flex;
+  justify-content: space-evenly;
+}

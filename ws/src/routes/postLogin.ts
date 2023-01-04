@@ -1,23 +1,22 @@
 import { Application } from "express-ws"
 import bodyParser from "body-parser"
-import { findUserById, findUserByUsername } from "../../repositories/userRepository"
+import { findUserByUsername, generateExpiresDateLoginCookie } from "../../repositories/userRepository"
+import { guestMiddleware } from "../middlewares/guest"
 
 export function postLogin (app: Application) {
-  app.post('/login', bodyParser.urlencoded(), async (req, res) => {
-    const userById = findUserById(req.signedCookies.ssid)
-    if(!userById) {
+  app.post('/login', guestMiddleware, bodyParser.urlencoded(), async (req, res) => {
+    try {
+      const user = await findUserByUsername(req.body.username)
+      if (!user) {
+        let error = encodeURI('Invalid username')
+        res.status(401).redirect('/login?error=' + error)
+        return
+      }
+      res.cookie('ssid', user.id, { signed: true, httpOnly: true, expires: generateExpiresDateLoginCookie(), sameSite: true })
       res.redirect('/')
-      return
+    } catch (e) {
+      console.error(e)
+      res.status(500).send('Internal Server Error')
     }
-    const user = await findUserByUsername(req.body.username)
-    if (!user) {
-      res.status(401).send('Invalid username')
-      setTimeout(() => res.redirect('/login'), 5000)
-      return
-    }
-    const expiresDate = new Date()
-    expiresDate.setDate(expiresDate.getDate() + 14);
-    res.cookie('ssid', user.id, { signed: true, httpOnly: true, expires: expiresDate, sameSite: true })
-    res.redirect('/')
   })
 }

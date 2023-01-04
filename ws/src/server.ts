@@ -8,6 +8,9 @@ import { postLogin } from './routes/postLogin'
 import { getChat } from './routes/getChat'
 import { getWs } from './routes/getWs'
 import { getLogout } from './routes/getLogout'
+import { authMiddleware } from './middlewares/auth'
+import { getRegister } from './routes/getRegister'
+import { postRegister } from './routes/postRegister'
 
 const SECRET_KEY = "^x&+r=lz0k0rex5!beuvri4#7a9!ugm371i_-yt-g=czior_7v"
 
@@ -25,6 +28,10 @@ function main() {
 
   getLogin(app)
   postLogin(app)
+  getRegister(app)
+  postRegister(app)
+
+  app.use(authMiddleware)
   getChat(app)
   getWs(app, sockets)
   getLogout(app)
