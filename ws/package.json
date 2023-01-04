@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "oui",
   "main": "src/server.ts",
+  "repository": "https://github.com/Mathis-Gasparotto/chat-gpt",
   "scripts": {
     "watch": "node --watch .",
     "ts": "ts-node --esm --experimental-specifier-resolution=node src/server.ts",
